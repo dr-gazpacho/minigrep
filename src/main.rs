@@ -1,5 +1,5 @@
-use std::{env, fs, process, error::Error};
-
+use minigrep::search;
+use std::{env, error::Error, fs, process};
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -34,12 +34,13 @@ impl Config {
     }
 }
 
-
 // even functions with no defined return will return a unit (i guess this is void)
 fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.file_path)?;
 
-    println!("With text:\n{contents}");
+    for line in search(&config.query, &contents) {
+        println!("{line}");
+    }
 
     Ok(())
 }
